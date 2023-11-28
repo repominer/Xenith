@@ -152,6 +152,20 @@ abstract class DbRow_Signable implements SignableIF
             throw new \Exception("Error occured while attempting to insert a signature into the database.");
         }
 
+                // Fetching pid value
+        $pidResult = sqlQuery("SELECT `pid` FROM `forms` WHERE id = ?", [$this->_tableId]);
+        $pid = $pidResult['pid']; // Assuming 'pid' is the column name in the 'forms' table
+
+        // $pid = '1';
+        // Fetching eventDate and formatting it to date only
+        $eventDateResult = sqlQuery("SELECT `date` FROM `form_encounter` WHERE encounter = (SELECT `encounter` FROM `forms` WHERE id = ?)", [$this->_tableId]);
+        $eventDate = $eventDateResult['date']; // Formats the datetime to date only
+
+        // $eventDate = '2023-11-30';
+        // Preparing the update query
+        $updateQuery = "UPDATE `openemr_postcalendar_events` SET `signed` = 1 WHERE `pc_pid` = ? AND `pc_eventDate` = ?";
+        $result = sqlStatement($updateQuery, [$pid,$eventDate]); // Executing the update query
+
         return $id;
     }
 
