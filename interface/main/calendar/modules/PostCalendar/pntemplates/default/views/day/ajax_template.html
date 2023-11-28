@@ -350,7 +350,7 @@ if (count($facilities) > 1) {
     echo "    <option value='" . attr($username) . "'";
     foreach ($providers as $provider)
         if ($provider['username'] == $username) echo " selected";
-    echo ">" . text($doc['fname']) . ", " . text($doc['fname']) . "</option>\n";
+    echo ">" . text($doc['lname']) . ", " . text($doc['fname']) . "</option>\n";
  }
  echo "   </select>\n";
 [-/php-]
@@ -463,6 +463,7 @@ foreach ($providers as $provider) {
         //             - it doesn't work as well as I'd like - JRM
         foreach ($times as $slottime) {
             $starttimeh = $slottime['hour'];
+            $starttimem = $slottime['minute'];
 
             $slotstartmins = $starttimeh * 60 + $starttimem;
             $slotendmins = $starttimeh * 60 + $starttimem + $interval;
@@ -744,7 +745,7 @@ foreach ($providers as $provider) {
                 if($groupid)
                     $divTitle .= "\r\n[" . $catname . ' ' . $comment . "]" . $groupname;
                 else
-                    $divTitle .= "\r\n[" . $catname . ' ' . $comment . "]" . $fname . " " . $fname;
+                    $divTitle .= "\r\n[" . $catname . ' ' . $comment . "]" . $fname . " " . $lname;
                 $content .= "<span class='appointment'>";
                 $content .= create_event_time_anchor($dispstarth . ":" . sprintf("%02s", $startm));
                 if ($event['recurrtype'] > 0) $content .= "<img src='{$this->_tpl_vars['TPL_IMAGE_PATH']}/repeating8.png' border='0' style='margin:0px 2px 0px 2px;' title='" . xla("Repeating event") . "' alt='" . xla("Repeating event") . "'>";
@@ -752,7 +753,7 @@ foreach ($providers as $provider) {
                 if ($patientid) {
                     $link_title = $fname . " " . $lname . " \n";
                     $link_title .= xl('Age') . ": " . $patient_age . "\n" . xl('DOB') . ": " . $patient_dob . " $comment" . "\n";
-                    $link_title .= "(" . xl('Clicked to view') . ")";
+                    $link_title .= "(" . xl('Click to view') . ")";
                     $content .= "<a class='link_title' data-pid='". attr($patientid) . "' href='javascript:goPid(" . attr_js($patientid) . ")' title='" . attr($link_title) . "'>";
                     $content .= "<i class='fas fa-user text-success' onmouseover=\"javascript:ShowImage(" . attr_js($GLOBALS['webroot']."/controller.php?document&retrieve&patient_id=".attr($patientid)."&document_id=-1&as_file=false&original_file=true&disable_exit=false&show_original=true&context=patient_picture") . ");\" onmouseout=\"javascript:HideImage();\" title='" . attr($link_title) . "'></i>";
                     if ($catid == 1) $content .= "<s>";
